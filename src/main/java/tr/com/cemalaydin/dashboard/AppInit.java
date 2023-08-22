@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AppInit  {
+public class AppInit {
 
     private final UserService userService;
 
@@ -24,7 +24,7 @@ public class AppInit  {
 
     private void addAdminUser() {
         String adminUsername = "admin@localhost.com";
-        User u = userService.findByUsername(adminUsername).orElse(null) ;
+        User u = userService.findByUsername(adminUsername).orElse(null);
         if (u == null) {
             u = new User();
             u.setEmail(adminUsername);
@@ -43,16 +43,26 @@ public class AppInit  {
 
     private void addAnonymousUser() {
         String adminUsername = "anonymousUser@localhost.com";
-        User u = userService.findByUsername(adminUsername).orElse(null) ;
+        User u = userService.findByUsername(adminUsername).orElse(null);
         if (u == null) {
-            u = new User();
-            u.setEmail(adminUsername);
-            u.setUsername(adminUsername);
-            u.setFullName("anonymousUser");
-            u.setRoles("ROLE_USER");
+            u = User.builder()
+                    .email(adminUsername)
+                    .username(adminUsername)
+                    .fullName("anonymousUser")
+                    .roles("ROLE_USER")
+                    .password(new BCryptPasswordEncoder().encode("admin"))
+                    .provider(AuthProvider.LOCAL)
+                    .build();
             u.setStatus(Status.ACTIVE);
-            u.setPassword(new BCryptPasswordEncoder().encode("anonymousUser"));
-            u.setProvider(AuthProvider.LOCAL);
+
+//            u = new User();
+//            u.setEmail(adminUsername);
+//            u.setUsername(adminUsername);
+//            u.setFullName("anonymousUser");
+//            u.setRoles("ROLE_USER");
+//            u.setStatus(Status.ACTIVE);
+//            u.setPassword(new BCryptPasswordEncoder().encode("admin"));
+//            u.setProvider(AuthProvider.LOCAL);
             userService.save(u);
             System.out.println("anonymousUser user added.");
         } else {

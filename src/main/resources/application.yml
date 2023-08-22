@@ -4,9 +4,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/hm
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: xxx
+    password: postgres
     hikari:
       connection-timeout: 30000
       idle-timeout: 600000
